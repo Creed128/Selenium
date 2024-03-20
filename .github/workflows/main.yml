@@ -17,9 +17,7 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: |
-          npm install
-          npm install selenium-webdriver chromedriver mocha chai
+        run: npm install
 
       - name: Build React App
         run: npm run build
@@ -31,4 +29,4 @@ jobs:
         run: sleep 10
 
       - name: Run Selenium Tests
-        run: npm test
+        run: npm run test:selenium
