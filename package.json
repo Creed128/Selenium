@@ -21,7 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-      "test:selenium": "mocha src/test.js -t 10000",
+    "test": "npx mocha --no-timeouts 'src/test.js'",
     "eject": "react-scripts eject"
   },
   
