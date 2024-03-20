@@ -1,25 +1,48 @@
+// diese Datei gehört in einen unterordner der src heißen soll
 require("chromedriver");
-const { Builder, By, Key, until } = require("selenium-webdriver");
+
+const { Builder, By, Key, Capabilities } = require("selenium-webdriver");
 var assert = require("chai").assert;
 
+//describe - describes test
 describe("add note", function () {
+    //it - describes expected behaviour
     it("should add a note and display on the page", async function () {
-        let driver = await new Builder().forBrowser("chrome").build();
+        /*Selenium automates:
+       1. Open Chrome
+       2. Navigate to app
+       3. Type "Hello Selenium" in input box
+       4. Clicks the Enter key
+      */
+        //Chai asserts if new note's text matches the input
+
+        //open Chrome browser
+        const chromeCapabilities = Capabilities.chrome();
+        chromeCapabilities.set('goog:chromeOptions', {args: ['--headless'] });
+
+        const driver = new Builder().withCapabilities(chromeCapabilities).build();
+
         try {
+            //open the website
             await driver.get("http://localhost:3000/");
 
-            // Warten, bis das Eingabefeld sichtbar ist, und dann die Notiz eingeben
-            let inputField = await driver.wait(until.elementLocated(By.xpath('//input')), 10000);
-            await inputField.sendKeys("Hello Selenium", Key.RETURN);
+            //find the search box and enter a note
+            await driver
+                .findElement(By.xpath('//input'))
+                .sendKeys("Hello Selenium", Key.RETURN);
 
-            // Warten, bis die Notiz angezeigt wird, und den Text überprüfen
-            let note = await driver.wait(until.elementLocated(By.xpath('//div[@class="note-name"]')), 10000);
-            let noteText = await note.getText();
-            assert.equal(noteText, "Hello Selenium");
+            //get the note's text
+            let note = await driver
+                .findElement(By.xpath('//div[@class="note-name"]'))
+                .getText();
 
+            //assert that the note's text is the same as the input text "Hello Selenium"    
+            assert.equal(note, "Hello Selenium");
             console.log("TEST PASSED");
         } finally {
+            //close the browser
             await driver.quit();
         }
-    });
-});
+
+    })
+})
